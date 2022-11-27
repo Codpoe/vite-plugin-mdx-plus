@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-mdx-plus",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A vite plugin to use mdx with more opinionated features. It's plus!",
   "keywords": [
     "vite-plugin",
@@ -36,7 +36,9 @@
       "commitMessage": "chore: release v${version}"
     },
     "hooks": {
-      "before:init": ["pnpm run lint"],
+      "before:init": [
+        "pnpm run lint"
+      ],
       "after:bump": "pnpm run build"
     }
   },
