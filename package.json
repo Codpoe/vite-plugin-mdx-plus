@@ -1,14 +1,14 @@
 {
-  "name": "vite-plugin-mdx-pro",
+  "name": "vite-plugin-mdx-plus",
   "version": "0.1.0",
-  "description": "A vite plugin to use mdx with more opinionated features. It's pro!",
+  "description": "A vite plugin to use mdx with more opinionated features. It's plus!",
   "keywords": [
     "vite-plugin",
     "mdx"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Codpoe/vite-plugin-mdx-pro.git"
+    "url": "git+https://github.com/Codpoe/vite-plugin-mdx-plus.git"
   },
   "author": "Codpoe <codpoe.me@gmail.com>",
   "license": "MIT",

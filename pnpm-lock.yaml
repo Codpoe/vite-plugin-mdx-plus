@@ -99,7 +99,7 @@ importers:
       tailwindcss: ^3.1.8
       typescript: ^4.6.3
       vite: ^3.2.4
-      vite-plugin-mdx-pro: workspace:*
+      vite-plugin-mdx-plus: workspace:*
     dependencies:
       '@mdx-js/react': 2.1.3_react@18.2.0
       react: 18.2.0
@@ -114,7 +114,7 @@ importers:
       tailwind-typography: 0.1.0_tailwindcss@3.1.8
       typescript: 4.7.4
       vite: 3.2.4
-      vite-plugin-mdx-pro: link:..
+      vite-plugin-mdx-plus: link:..
 
 packages:
 

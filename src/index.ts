@@ -21,7 +21,7 @@ import { remarkCallout } from './mdx/callout.js';
 import { remarkMdxToc } from './mdx/toc.js';
 import { rehypeHighlight } from './mdx/highlight.js';
 
-export function mdxPro(userOptions: UserOptions = {}): Plugin[] {
+export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
   const options = defu<UserOptions, UserOptions[]>(userOptions, {
     mdxExtensions: ['.md', '.mdx'],
     format: 'mdx',
@@ -79,7 +79,7 @@ function mdxRefresh({
   let viteReactPlugin: Plugin | undefined;
 
   return {
-    name: 'mdx-pro:refresh',
+    name: 'mdx-plus:refresh',
     configResolved(config) {
       viteReactPlugin = config.plugins.find(p => p.name === 'vite:react-babel');
     },
@@ -113,7 +113,7 @@ function mdxRefresh({
 
 function mdxDemo(options: Pick<UserOptions, 'theme'>): Plugin {
   return {
-    name: `mdx-pro:demo`,
+    name: `mdx-plus:demo`,
     resolveId(source) {
       // resolve demo. fulfill demo file path
       if (source.startsWith(DEMO_MODULE_ID_PREFIX)) {
@@ -133,7 +133,7 @@ function mdxCodeDemo(
   options: Pick<UserOptions, 'transformCodeDemo' | 'theme'>
 ): Plugin {
   return {
-    name: `mdx-pro:code-demo`,
+    name: `mdx-plus:code-demo`,
     resolveId(source) {
       if (source.startsWith(CODE_DEMO_MODULE_ID_PREFIX)) {
         return '\0' + source;
