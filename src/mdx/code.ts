@@ -10,7 +10,7 @@ import type {
 } from 'mdast-util-mdx-jsx';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
 import type { Code } from 'mdast';
-import { RESOLVED_CODE_DEMO_MODULE_ID_PREFIX } from '../constants.js';
+import { CODE_DEMO_MODULE_ID_PREFIX } from '../constants.js';
 import { UserOptions } from '../types.js';
 import { getHighlighter, Highlighter } from './highlight.js';
 
@@ -35,7 +35,7 @@ function getCodeDemoId(currentSize: number) {
 
 function getCodeDemoModuleId(filePath: string, codeDemoId: string) {
   return path.normalize(
-    `${RESOLVED_CODE_DEMO_MODULE_ID_PREFIX}${filePath}/${codeDemoId}.tsx`
+    `${CODE_DEMO_MODULE_ID_PREFIX}${filePath}/${codeDemoId}.tsx`
   );
 }
 
@@ -227,7 +227,6 @@ ${finalCode}
 
 export const code = ${JSON.stringify(finalCode)};
 export const codeHtml = ${JSON.stringify(codeHtml)};
-export const meta = {};
-export const language = '${language || ''}';
+export const language = ${JSON.stringify(language)};
 `;
 }

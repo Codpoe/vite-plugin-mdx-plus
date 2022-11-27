@@ -1,0 +1,52 @@
+# Code
+
+## normal code
+
+```tsx
+import React from 'react';
+
+export type CalloutType = 'tip' | 'info' | 'warning' | 'danger';
+
+export interface CalloutProps {
+  type: CalloutType;
+  title?: React.ReactNode;
+  children?: React.ReactNode;
+}
+
+export function Callout({
+  type,
+  title = type.toUpperCase(),
+  children,
+}: CalloutProps) {
+  return (
+    <div className="my-5 p-4 rounded-lg bg-gray-100">
+      <div className="text-lg font-semibold">{title}</div>
+      {children && <div className="mt-1 ml-0.5">{children}</div>}
+    </div>
+  );
+}
+```
+
+## code demo
+
+```tsx demo
+import { useState } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <>
+      <div>Code Demo</div>
+      <div>
+        <button onClick={() => setCount(count - 1)}>-</button>
+        <span>{count}</span>
+        <button onClick={() => setCount(count + 1)}>+</button>
+      </div>
+    </>
+  );
+}
+```
+
+## Demo
+
+<Demo src="../components/Demo/Counter.tsx" />

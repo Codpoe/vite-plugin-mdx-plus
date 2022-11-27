@@ -17,12 +17,11 @@ import {
 } from './constants.js';
 import { loadDemo, remarkMdxDemo } from './mdx/demo.js';
 import { loadCodeDemo, remarkMdxCodeDemo } from './mdx/code.js';
-// import { remarkImg } from './mdx/img.js';
 import { remarkCallout } from './mdx/callout.js';
 import { remarkMdxToc } from './mdx/toc.js';
 import { rehypeHighlight } from './mdx/highlight.js';
 
-export function mdxDoc(userOptions: UserOptions = {}): Plugin[] {
+export function mdxPro(userOptions: UserOptions = {}): Plugin[] {
   const options = defu<UserOptions, UserOptions[]>(userOptions, {
     mdxExtensions: ['.md', '.mdx'],
     format: 'mdx',
@@ -32,9 +31,6 @@ export function mdxDoc(userOptions: UserOptions = {}): Plugin[] {
       [remarkFrontmatter, userOptions.frontmatter],
       [remarkMdxFrontmatter, { name: 'meta' }],
       remarkDirective,
-      // [remarkImg, { base }],
-      // CodeDemo needs to come before CodeMeta
-      // to preprocess the demo prop in the meta
       remarkMdxCodeDemo,
       remarkMdxDemo,
       remarkCallout,
@@ -83,12 +79,16 @@ function mdxRefresh({
   let viteReactPlugin: Plugin | undefined;
 
   return {
-    name: 'pressify:mdx-refresh',
+    name: 'mdx-pro:refresh',
     configResolved(config) {
       viteReactPlugin = config.plugins.find(p => p.name === 'vite:react-babel');
     },
     async transform(code, id, opts) {
-      if (filter(id) && /\.mdx?$/.test(id) && viteReactPlugin?.transform) {
+      if (
+        filter(id) &&
+        /\.mdx?$/.test(id) &&
+        typeof viteReactPlugin?.transform === 'function'
+      ) {
         // use vite react plugin to inject react refresh code into markdown
         const result = await viteReactPlugin.transform.call(
           this,
@@ -113,7 +113,7 @@ function mdxRefresh({
 
 function mdxDemo(options: Pick<UserOptions, 'theme'>): Plugin {
   return {
-    name: `pressify:mdx-demo`,
+    name: `mdx-pro:demo`,
     resolveId(source) {
       // resolve demo. fulfill demo file path
       if (source.startsWith(DEMO_MODULE_ID_PREFIX)) {
@@ -122,7 +122,8 @@ function mdxDemo(options: Pick<UserOptions, 'theme'>): Plugin {
     },
     load(id) {
       if (id.startsWith(RESOLVED_DEMO_MODULE_ID_PREFIX)) {
-        return loadDemo(id, options);
+        id = id.slice('\0'.length).split('?')[0];
+        return loadDemo.call(this, id, options);
       }
     },
   };
@@ -132,7 +133,7 @@ function mdxCodeDemo(
   options: Pick<UserOptions, 'transformCodeDemo' | 'theme'>
 ): Plugin {
   return {
-    name: `pressify:mdx-code-demo`,
+    name: `mdx-pro:code-demo`,
     resolveId(source) {
       if (source.startsWith(CODE_DEMO_MODULE_ID_PREFIX)) {
         return '\0' + source;
@@ -141,7 +142,7 @@ function mdxCodeDemo(
     load(id) {
       if (id.startsWith(RESOLVED_CODE_DEMO_MODULE_ID_PREFIX)) {
         // clean query string
-        id = id.split('?')[0];
+        id = id.slice('\0'.length).split('?')[0];
         return loadCodeDemo(id, options);
       }
     },

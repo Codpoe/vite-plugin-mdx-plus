@@ -1,7 +1,8 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
+import { MarkdownRenderer } from './components/MarkdownRenderer';
 import MdFromTailwind from './markdown/FromTailwind.mdx';
 import MdCallout from './markdown/Callout.mdx';
-import { MarkdownRenderer } from './components/MarkdownRenderer';
+import MdCode from './markdown/Code.mdx';
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
         </NavLink>
         <NavLink className={navLinkClassName} to="/callout">
           Callout
+        </NavLink>
+        <NavLink className={navLinkClassName} to="/code">
+          Code
         </NavLink>
       </div>
       <Routes>
@@ -28,6 +32,14 @@ function App() {
           element={
             <MarkdownRenderer>
               <MdCallout />
+            </MarkdownRenderer>
+          }
+        />
+        <Route
+          path="/code"
+          element={
+            <MarkdownRenderer>
+              <MdCode />
             </MarkdownRenderer>
           }
         />

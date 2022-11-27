@@ -3,11 +3,12 @@
  */
 import path from 'upath';
 import fs from 'fs-extra';
+import type { PluginContext } from 'rollup';
 import type { Plugin } from 'unified';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
 import { Parent, visit } from 'unist-util-visit';
-import { RESOLVED_DEMO_MODULE_ID_PREFIX } from '../constants.js';
+import { DEMO_MODULE_ID_PREFIX } from '../constants.js';
 import { UserOptions } from '../types.js';
 import { getHighlighter, Highlighter } from './highlight.js';
 
@@ -19,11 +20,11 @@ const extToLangMap: Record<string, string> = {
 };
 
 export function getDemoModuleId(filePath: string) {
-  return `${RESOLVED_DEMO_MODULE_ID_PREFIX}${filePath}`;
+  return `${DEMO_MODULE_ID_PREFIX}${filePath}`;
 }
 
 export function extractDemoPath(id: string) {
-  return path.resolve('/', id.slice(RESOLVED_DEMO_MODULE_ID_PREFIX.length));
+  return path.join('/', id.slice(DEMO_MODULE_ID_PREFIX.length));
 }
 
 /**
@@ -150,6 +151,7 @@ export const remarkMdxDemo: Plugin = () => (tree, file: any) => {
 let getHighlighterPromise: Promise<Highlighter> | null = null;
 
 export async function loadDemo(
+  this: PluginContext,
   id: string,
   options: Pick<UserOptions, 'theme'>
 ): Promise<string> {
@@ -160,7 +162,13 @@ export async function loadDemo(
   const { highlight, theme } = await getHighlighterPromise;
 
   const filePath = extractDemoPath(id);
-  const code = (await fs.readFile(filePath, 'utf-8')).trim();
+  const resolvedId = await this.resolve(filePath);
+
+  if (!resolvedId) {
+    throw new Error(`Cannot resolve "${filePath}"`);
+  }
+
+  const code = (await fs.readFile(resolvedId.id, 'utf-8')).trim();
   const language: string | undefined = extToLangMap[path.extname(filePath)];
 
   let codeHtml: string;
@@ -178,6 +186,6 @@ export { default } from '${filePath}';
 
 export const code = ${JSON.stringify(code)};
 export const codeHtml = ${JSON.stringify(codeHtml)};
-export const language = '${language}';
+export const language = ${JSON.stringify(language)};
 `;
 }
