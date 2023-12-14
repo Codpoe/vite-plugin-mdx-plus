@@ -43,7 +43,7 @@ function getFileCommitTime(filePath: string): string | undefined {
 
   try {
     const commitTime = execSync(
-      `git log -n 1 --pretty=format:"%at" -- ${filePath}`,
+      `git log -n 1 --pretty=format:"%at" -- "${filePath}"`,
       { encoding: 'utf-8', stdio: 'pipe' },
     );
     return (fileToCommitTimeMap[filePath] = commitTime);
