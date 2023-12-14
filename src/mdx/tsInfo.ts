@@ -26,7 +26,7 @@ const defaultTsConfig: ts.CompilerOptions = {
 export function extractInterfaceInfo(
   filePath: string,
   exportName: string,
-  options: ts.CompilerOptions = defaultTsConfig
+  options: ts.CompilerOptions = defaultTsConfig,
 ): TsInterfaceInfo {
   // Build a program using the set of root file names in fileNames
   const program = ts.createProgram([filePath], options);
@@ -49,7 +49,7 @@ export function extractInterfaceInfo(
 
   if (!exportSymbol) {
     throw new Error(
-      `[pressify] Named export '${exportName}' is not found in file ${filePath}`
+      `[pressify] Named export '${exportName}' is not found in file ${filePath}`,
     );
   }
 
@@ -58,13 +58,13 @@ export function extractInterfaceInfo(
 
   if (!sourceDeclaration) {
     throw new Error(
-      `[pressify] Can not find sourceDeclaration for ${exportName}`
+      `[pressify] Can not find sourceDeclaration for ${exportName}`,
     );
   }
 
   const interfaceInfo = collectInterfaceInfo(
     sourceDeclaration,
-    sourceDeclareSymbol
+    sourceDeclareSymbol,
   );
 
   return interfaceInfo;
@@ -78,7 +78,7 @@ export function extractInterfaceInfo(
 
   function collectInterfaceInfo(
     sourceDeclaration: ts.Declaration,
-    sourceSymbol: ts.Symbol
+    sourceSymbol: ts.Symbol,
   ) {
     if (!ts.isInterfaceDeclaration(sourceDeclaration)) {
       throw new Error(`[pressify] Target is not an InterfaceDeclaration`);
@@ -90,7 +90,7 @@ export function extractInterfaceInfo(
 
     const name = sourceDeclaration.name.getText();
     const description = ts.displayPartsToString(
-      sourceSymbol.getDocumentationComment(checker)
+      sourceSymbol.getDocumentationComment(checker),
     );
 
     const propertiesInfo: TsInterfacePropertyInfo[] = [];
@@ -107,20 +107,20 @@ export function extractInterfaceInfo(
         throw new Error(
           `[pressify] Unexpected declaration type in interface. name: ${memberName}, kind: ${
             ts.SyntaxKind[valueDeclaration?.kind as ts.SyntaxKind]
-          }`
+          }`,
         );
       }
 
       const typeText = valueDeclaration.type?.getText() ?? '';
       const description = ts.displayPartsToString(
-        member.getDocumentationComment(checker)
+        member.getDocumentationComment(checker),
       );
       const optional = Boolean(member.getFlags() & ts.SymbolFlags.Optional);
 
       // get defaultValue from jsDocTags
       const jsDocTags = member.getJsDocTags();
       const defaultValueTag = jsDocTags.find(
-        t => t.name === 'defaultValue' || 'default'
+        t => t.name === 'defaultValue' || 'default',
       );
       const defaultValue = defaultValueTag?.text?.[0]?.text;
 
@@ -141,6 +141,7 @@ export function extractInterfaceInfo(
   }
 
   /** True if this is visible outside this file, false otherwise */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function isNodeExported(node: ts.Node): boolean {
     return (
       (ts.getCombinedModifierFlags(node as ts.Declaration) &
@@ -152,13 +153,14 @@ export function extractInterfaceInfo(
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getComment(declaration: ts.Declaration, sourceFileFullText: string) {
   // Compiler internal:
   // https://github.com/microsoft/TypeScript/blob/66ecfcbd04b8234855a673adb85e5cff3f8458d4/src/compiler/utilities.ts#L1202
   const ranges = (ts as any).getJSDocCommentRanges.call(
     ts,
     declaration,
-    sourceFileFullText
+    sourceFileFullText,
   );
 
   if (!ranges || !ranges.length) {
@@ -212,7 +214,7 @@ export function tsInfoMdxPlugin() {
         if (src && name) {
           const imported = `__tsInfo_${addImports.length}`;
           addImports.push(
-            `import * as ${imported} from '${getTsInfoModuleId(src, name)}';`
+            `import * as ${imported} from '${getTsInfoModuleId(src, name)}';`,
           );
           child.value = `<TsInfo {...${imported}} />`;
         }
@@ -225,7 +227,7 @@ export function tsInfoMdxPlugin() {
           type: 'import',
           value: importStr,
         } as any;
-      })
+      }),
     );
   };
 }

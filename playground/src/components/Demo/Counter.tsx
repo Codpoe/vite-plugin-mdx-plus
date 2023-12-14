@@ -4,7 +4,7 @@ export default function Counter() {
   const [count, setCount] = useState(0);
   return (
     <>
-      <div>Demo example</div>
+      <div className="text-green-500">Demo example</div>
       <div>
         <button onClick={() => setCount(count - 1)}>-</button>
         <span>{count}</span>

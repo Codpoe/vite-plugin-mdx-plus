@@ -66,6 +66,6 @@ export const remarkCallout: Plugin<[]> = () => tree => {
 
       // replace current node
       parent.children[index!] = calloutNode;
-    }
+    },
   );
 };

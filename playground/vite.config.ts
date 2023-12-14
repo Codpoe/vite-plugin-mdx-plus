@@ -7,5 +7,5 @@ export default defineConfig({
   // optimizeDeps: {
   //   include: ['@mdx-js/react'],
   // },
-  plugins: [react(), mdxPlus()],
+  plugins: [mdxPlus(), react({ include: /\.([tj]s|md)x?$/ })],
 });

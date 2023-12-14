@@ -35,7 +35,7 @@ function getCodeDemoId(currentSize: number) {
 
 function getCodeDemoModuleId(filePath: string, codeDemoId: string) {
   return path.normalize(
-    `${CODE_DEMO_MODULE_ID_PREFIX}${filePath}/${codeDemoId}.tsx`
+    `${CODE_DEMO_MODULE_ID_PREFIX}${filePath}/${codeDemoId}.tsx`,
   );
 }
 
@@ -78,7 +78,7 @@ export const remarkMdxCodeDemo: Plugin = () => (tree: any, file) => {
       language: node.lang ?? undefined,
     });
 
-    // push `import * as __code_demo_0 from '/@pressify/code-demo/xxx'`
+    // push `import * as __code_demo_0 from '/@mdx-plus/code-demo/xxx'`
     imports.push({
       type: 'mdxjsEsm',
       data: {
@@ -182,7 +182,10 @@ export const remarkMdxCodeMeta: Plugin = () => (tree: any) => {
       .join(' ');
 
     const value = `<pre><code ${codeProps}>{${code}}</code></pre>`;
-    const estree = parser.parse(value, { ecmaVersion: 'latest' });
+    const estree = parser.parse(value, {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    });
 
     parent.children[index!] = {
       type: 'mdxFlowExpression',
@@ -196,7 +199,7 @@ let getHighlighterPromise: Promise<Highlighter> | null = null;
 
 export async function loadCodeDemo(
   moduleId: string,
-  options: Pick<UserOptions, 'transformCodeDemo' | 'theme'>
+  options: Pick<UserOptions, 'transformCodeDemo' | 'theme'>,
 ) {
   const { code, language } = moduleIdToCodeMap.get(moduleId) || {};
 

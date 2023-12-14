@@ -27,7 +27,7 @@ export interface Highlighter {
 }
 
 export async function getHighlighter(
-  theme: Theme | ShikiThemeObj = 'github-light'
+  theme: Theme | ShikiThemeObj = 'github-light',
 ): Promise<Highlighter> {
   const isStringTheme = typeof theme === 'string';
   const themes = isStringTheme ? [theme] : [theme.dark, theme.light];
@@ -37,26 +37,26 @@ export async function getHighlighter(
   const highlight = (
     code: string,
     lang?: string,
-    themeType?: 'light' | 'dark'
+    themeType?: 'light' | 'dark',
   ): string => {
     const _theme = typeof theme === 'string' ? theme : theme[themeType!];
     lang = (lang && langToBundledLang[lang]) || lang;
 
     try {
-      let html = highlighter.codeToHtml(code.trim(), lang, _theme);
+      let html = highlighter.codeToHtml(code.trim(), { lang, theme: _theme });
 
       if (themeType) {
         html = html.replace(/^<pre.*?(class=".*?")/, (str, originalClassStr) =>
           str.replace(
             originalClassStr,
-            `class="${themeTypeClassMap[themeType]}"`
-          )
+            `class="${themeTypeClassMap[themeType]}"`,
+          ),
         );
       }
 
       if (themeStyleMap[_theme]) {
         html = html.replace(/^<pre.*?(style=".*?")/, (str, originalStyleStr) =>
-          str.replace(originalStyleStr, `style="${themeStyleMap[_theme]}"`)
+          str.replace(originalStyleStr, `style="${themeStyleMap[_theme]}"`),
         );
       }
 
@@ -126,7 +126,7 @@ export const rehypeHighlight: Plugin<[Pick<UserOptions, 'theme'>]> =
             theme: theme.dark,
             html: highlight(codeValue, lang, 'dark'),
             class: 'py-code-dark',
-          }
+          },
         );
       }
 
@@ -138,7 +138,7 @@ export const rehypeHighlight: Plugin<[Pick<UserOptions, 'theme'>]> =
         .map(result => {
           const [, classStr, styleStr, codeHtml] =
             result.html.match(
-              /^<pre\s+class="(.*?)"\s+style="(.*?)">((.|\n)*)<\/pre>$/
+              /^<pre\s+class="(.*?)"\s+style="(.*?)">((.|\n)*)<\/pre>$/,
             ) || [];
 
           if (!classStr || !styleStr) {

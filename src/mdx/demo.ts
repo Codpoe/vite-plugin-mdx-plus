@@ -7,7 +7,7 @@ import type { PluginContext } from 'rollup';
 import type { Plugin } from 'unified';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
-import { Parent, visit } from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 import { DEMO_MODULE_ID_PREFIX } from '../constants.js';
 import { UserOptions } from '../types.js';
 import { getHighlighter, Highlighter } from './highlight.js';
@@ -44,7 +44,7 @@ export const remarkMdxDemo: Plugin = () => (tree, file: any) => {
       attr =>
         attr.type === 'mdxJsxAttribute' &&
         attr.name === 'src' &&
-        typeof attr.value === 'string'
+        typeof attr.value === 'string',
     );
 
     let src = node.attributes[srcIndex]?.value as string | undefined;
@@ -145,7 +145,7 @@ export const remarkMdxDemo: Plugin = () => (tree, file: any) => {
   });
 
   // add imports
-  (tree as Parent).children.unshift(...imports);
+  (tree as any).children.unshift(...imports);
 };
 
 let getHighlighterPromise: Promise<Highlighter> | null = null;
@@ -153,7 +153,7 @@ let getHighlighterPromise: Promise<Highlighter> | null = null;
 export async function loadDemo(
   this: PluginContext,
   id: string,
-  options: Pick<UserOptions, 'theme'>
+  options: Pick<UserOptions, 'theme'>,
 ): Promise<string> {
   if (!getHighlighterPromise) {
     getHighlighterPromise = getHighlighter(options.theme);

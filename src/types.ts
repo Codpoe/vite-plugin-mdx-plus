@@ -1,7 +1,8 @@
-import { Options as MdxOptions } from '@mdx-js/rollup';
-import { Options as GfmOptions } from 'remark-gfm';
-import { Options as frontmatterOptions } from 'remark-frontmatter';
-import { Options as autolinkHeadingsOptions } from 'rehype-autolink-headings';
+import type { Options as MdxOptions } from '@mdx-js/rollup';
+import type { Options as GfmOptions } from 'remark-gfm';
+import type { Options as FrontmatterOptions } from 'remark-frontmatter';
+import type { RemarkMdxFrontmatterOptions } from 'remark-mdx-frontmatter';
+import type { Options as AutolinkHeadingsOptions } from 'rehype-autolink-headings';
 import { Theme } from 'shiki';
 
 export interface ShikiThemeObj {
@@ -17,11 +18,15 @@ export interface UserOptions extends MdxOptions {
   /**
    * @see https://github.com/remarkjs/remark-frontmatter
    */
-  frontmatter?: frontmatterOptions;
+  frontmatter?: FrontmatterOptions;
+  /**
+   * @see https://github.com/remcohaszing/remark-mdx-frontmatter
+   */
+  mdxFrontmatter?: RemarkMdxFrontmatterOptions;
   /**
    * @see https://github.com/rehypejs/rehype-autolink-headings
    */
-  autolinkHeadings?: autolinkHeadingsOptions;
+  autolinkHeadings?: AutolinkHeadingsOptions;
   theme?: Theme | ShikiThemeObj;
   transformCodeDemo?: (code: string) => string;
 }
