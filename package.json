@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-mdx-plus",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "A vite plugin to use mdx with more opinionated features. It's plus!",
   "keywords": [
     "vite-plugin",
