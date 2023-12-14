@@ -17,6 +17,7 @@ import { loadCodeDemo, remarkMdxCodeDemo } from './mdx/code.js';
 import { remarkCallout } from './mdx/callout.js';
 import { remarkMdxToc } from './mdx/toc.js';
 import { rehypeHighlight } from './mdx/highlight.js';
+import { remarkImg } from './mdx/img.js';
 
 export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
   const options = defu<UserOptions, UserOptions[]>(userOptions, {
@@ -32,6 +33,7 @@ export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
       remarkMdxDemo,
       remarkCallout,
       remarkMdxToc,
+      remarkImg,
     ],
     rehypePlugins: [
       rehypeSlug,
