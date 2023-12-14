@@ -18,6 +18,7 @@ import { remarkCallout } from './mdx/callout.js';
 import { remarkMdxToc } from './mdx/toc.js';
 import { rehypeHighlight } from './mdx/highlight.js';
 import { remarkImg } from './mdx/img.js';
+import { remarkExtraFrontmatter } from './mdx/extra-frontmatter.js';
 
 export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
   const options = defu<UserOptions, UserOptions[]>(userOptions, {
@@ -27,6 +28,8 @@ export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
     remarkPlugins: [
       [remarkGfm, userOptions.gfm],
       [remarkFrontmatter, userOptions.frontmatter],
+      // `extraFrontmatter` needs to be placed between `frontmatter` and `mdxFrontmatter`
+      remarkExtraFrontmatter,
       [remarkMdxFrontmatter, userOptions.mdxFrontmatter],
       remarkDirective,
       remarkMdxCodeDemo,
