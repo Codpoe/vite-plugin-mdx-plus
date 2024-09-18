@@ -1,4 +1,4 @@
-import { Plugin } from 'vite';
+import { PluginOption } from 'vite';
 import { defu } from 'defu';
 import mdx from '@mdx-js/rollup';
 import remarkGfm from 'remark-gfm';
@@ -7,20 +7,35 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import remarkDirective from 'remark-directive';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import { UserOptions } from './types.js';
+import rehypeShiki, { RehypeShikiOptions } from '@shikijs/rehype';
 import {
-  CODE_DEMO_MODULE_ID_PREFIX,
-  DEMO_MODULE_ID_PREFIX,
-} from './constants.js';
-import { loadDemo, remarkMdxDemo } from './mdx/demo.js';
-import { loadCodeDemo, remarkMdxCodeDemo } from './mdx/code.js';
+  transformerNotationDiff,
+  transformerMetaHighlight,
+  transformerNotationHighlight,
+  transformerNotationFocus,
+  transformerRemoveLineBreak,
+} from '@shikijs/transformers';
+import { UserOptions } from './types.js';
 import { remarkCallout } from './mdx/callout.js';
 import { remarkMdxToc } from './mdx/toc.js';
-import { rehypeHighlight } from './mdx/highlight.js';
 import { remarkImg } from './mdx/img.js';
 import { remarkExtraFrontmatter } from './mdx/extra-frontmatter.js';
 
-export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
+export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
+  const shikiOptions = defu<RehypeShikiOptions, RehypeShikiOptions[]>(
+    userOptions.shiki,
+    {
+      themes: { light: 'min-light', dark: 'plastic' },
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationHighlight(),
+        transformerMetaHighlight(),
+        transformerNotationFocus(),
+        transformerRemoveLineBreak(),
+      ],
+    },
+  );
+
   const options = defu<UserOptions, UserOptions[]>(userOptions, {
     mdxExtensions: ['.md', '.mdx'],
     format: 'mdx',
@@ -32,8 +47,6 @@ export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
       remarkExtraFrontmatter,
       [remarkMdxFrontmatter, userOptions.mdxFrontmatter],
       remarkDirective,
-      remarkMdxCodeDemo,
-      remarkMdxDemo,
       remarkCallout,
       remarkMdxToc,
       remarkImg,
@@ -54,7 +67,7 @@ export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
       //     },
       //   },
       // ],
-      [rehypeHighlight, { theme: userOptions.theme }],
+      [rehypeShiki, shikiOptions],
     ],
   });
 
@@ -65,47 +78,5 @@ export function mdxPlus(userOptions: UserOptions = {}): Plugin[] {
     ]);
   }
 
-  return [
-    { enforce: 'pre', ...mdx(options) },
-    mdxDemo(options),
-    mdxCodeDemo(options),
-  ];
-}
-
-function mdxDemo(options: Pick<UserOptions, 'theme'>): Plugin {
-  return {
-    name: `mdx-plus:demo`,
-    resolveId(source) {
-      // resolve demo. fulfill demo file path
-      if (source.startsWith(DEMO_MODULE_ID_PREFIX)) {
-        return source;
-      }
-    },
-    load(id) {
-      if (id.startsWith(DEMO_MODULE_ID_PREFIX)) {
-        id = id.split('?')[0];
-        return loadDemo.call(this, id, options);
-      }
-    },
-  };
-}
-
-function mdxCodeDemo(
-  options: Pick<UserOptions, 'transformCodeDemo' | 'theme'>,
-): Plugin {
-  return {
-    name: `mdx-plus:code-demo`,
-    resolveId(source) {
-      if (source.startsWith(CODE_DEMO_MODULE_ID_PREFIX)) {
-        return source;
-      }
-    },
-    load(id) {
-      if (id.startsWith(CODE_DEMO_MODULE_ID_PREFIX)) {
-        // clean query string
-        id = id.split('?')[0];
-        return loadCodeDemo(id, options);
-      }
-    },
-  };
+  return [{ enforce: 'pre', ...mdx(options) }];
 }

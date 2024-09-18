@@ -1,21 +1,27 @@
 import { NavLink, Route, Routes } from 'react-router-dom';
 import { MarkdownRenderer } from './components/MarkdownRenderer';
 import MdFromTailwind from './markdown/FromTailwind.mdx';
+import MdCodeBlock from './markdown/CodeBlock.mdx';
 import MdCallout from './markdown/Callout.mdx';
-import MdCode from './markdown/Code.mdx';
 
 function App() {
   return (
     <div className="max-w-3xl mx-auto my-16 px-5">
       <div className="flex flex-col space-y-1 mb-8">
+        <button
+          className="text-black dark:text-white"
+          onClick={() => document.documentElement.classList.toggle('dark')}
+        >
+          toggle dark mode
+        </button>
         <NavLink className={navLinkClassName} to="/">
           Sample from tailwind
         </NavLink>
+        <NavLink className={navLinkClassName} to="/code-block">
+          CodeBlock
+        </NavLink>
         <NavLink className={navLinkClassName} to="/callout">
           Callout
-        </NavLink>
-        <NavLink className={navLinkClassName} to="/code">
-          Code
         </NavLink>
       </div>
       <Routes>
@@ -28,18 +34,18 @@ function App() {
           }
         />
         <Route
-          path="/callout"
+          path="/code-block"
           element={
             <MarkdownRenderer>
-              <MdCallout />
+              <MdCodeBlock />
             </MarkdownRenderer>
           }
         />
         <Route
-          path="/code"
+          path="/callout"
           element={
             <MarkdownRenderer>
-              <MdCode />
+              <MdCallout />
             </MarkdownRenderer>
           }
         />

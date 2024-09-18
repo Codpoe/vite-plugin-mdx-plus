@@ -11,7 +11,6 @@ A vite plugin to use mdx with more opinionated features. It's plus!
 - Export `fontmatter` ([remark-frontmatter](https://github.com/remarkjs/remark-frontmatter), [remark-mdx-frontmatter](https://github.com/remcohaszing/remark-mdx-frontmatter))
 - Export content structure `toc` according to headings
 - Callout block ([remark-directive](https://github.com/remarkjs/remark-directive))
-- Transform code block to React component
 
 ## Install
 

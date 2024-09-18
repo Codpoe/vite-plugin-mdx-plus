@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx,md,mdx}'],
   theme: {
     extend: {},
   },
-  plugins: [require('tailwind-typography')({ target: 'legacy-not-prose' })],
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  plugins: [require('@tailwindcss/typography')({ target: 'legacy-not-prose' })],
 };
