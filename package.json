@@ -15,7 +15,8 @@
   "packageManager": "pnpm@9.8.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "style.css"
   ],
   "exports": {
     ".": "./dist/index.js",
