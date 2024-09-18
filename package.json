@@ -28,7 +28,7 @@
     "prepare": "husky install",
     "dev": "rimraf dist && tsc -w",
     "build": "rimraf dist && tsc",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint": "eslint src",
     "release": "release-it"
   },
   "lint-staged": {
