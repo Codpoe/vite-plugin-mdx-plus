@@ -78,5 +78,19 @@ export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
     ]);
   }
 
-  return [{ enforce: 'pre', ...mdx(options) }];
+  const mdxPlugin = mdx(options);
+
+  return [
+    {
+      ...mdxPlugin,
+      enforce: 'pre',
+      transform(code, id) {
+        const [path] = id.split('?');
+
+        if (path.endsWith('.md') || path.endsWith('.mdx')) {
+          return mdxPlugin.transform.call(this, code, path);
+        }
+      },
+    },
+  ];
 }

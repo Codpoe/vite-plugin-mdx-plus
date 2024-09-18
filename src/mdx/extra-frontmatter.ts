@@ -37,6 +37,10 @@ export const remarkExtraFrontmatter: Plugin = () => (tree: any, file) => {
 const fileToCommitTimeMap: Record<string, string> = {};
 
 function getFileCommitTime(filePath: string): string | undefined {
+  if (filePath.startsWith('/@')) {
+    return;
+  }
+
   if (fileToCommitTimeMap[filePath]) {
     return fileToCommitTimeMap[filePath];
   }
