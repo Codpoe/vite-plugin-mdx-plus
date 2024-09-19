@@ -21,9 +21,6 @@ import { remarkMdxToc } from './mdx/toc.js';
 import { remarkImg } from './mdx/img.js';
 import { remarkExtraFrontmatter } from './mdx/extra-frontmatter.js';
 
-// @vitejs/plugin-react
-const reactRefreshRuntimePath = '/@react-refresh';
-
 export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
   const shikiOptions = defu<RehypeShikiOptions, RehypeShikiOptions[]>(
     userOptions.shiki,
@@ -75,23 +72,6 @@ export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
 
         if (path.endsWith('.md') || path.endsWith('.mdx')) {
           return mdxPlugin.transform.call(this, code, path);
-        }
-      },
-    },
-    {
-      name: 'mdx-plus:react-refresh',
-      transform(code, id) {
-        if (
-          id === reactRefreshRuntimePath &&
-          code.includes('return prevExports[key] === nextExports[key]')
-        ) {
-          return code.replace(
-            'return prevExports[key] === nextExports[key]',
-            `if ('frontmatter' in nextExports && /fileName:\\s*"[^"]+\\.mdx?/.test(nextExports.default?.toString?.() || '') && ['frontmatter', 'toc'].includes(key)) {
-              return JSON.stringify(prevExports[key]) === JSON.stringify(nextExports[key]);
-            }
-              return prevExports[key] === nextExports[key];`,
-          );
         }
       },
     },

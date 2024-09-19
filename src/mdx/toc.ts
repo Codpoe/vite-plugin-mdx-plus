@@ -22,8 +22,8 @@ export const remarkMdxToc: Plugin = () => (tree: any) => {
   const toc: TocItem[] = [];
 
   visitChildren((node: any) => {
-    // only handle h2 ~ h4
-    if (node.type !== 'heading' || node.depth < 2 || node.depth > 4) {
+    // only handle h1 ~ h4
+    if (node.type !== 'heading' || node.depth > 4) {
       return;
     }
 
