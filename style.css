@@ -12,7 +12,8 @@
 }
 
 .shiki .line {
-  display: block;
+  display: inline-block;
+  width: 100%;
   padding: 0 20px;
 }
 

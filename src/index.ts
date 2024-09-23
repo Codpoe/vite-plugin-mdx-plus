@@ -13,7 +13,6 @@ import {
   transformerMetaHighlight,
   transformerNotationHighlight,
   transformerNotationFocus,
-  transformerRemoveLineBreak,
 } from '@shikijs/transformers';
 import { UserOptions } from './types.js';
 import { remarkCallout } from './mdx/callout.js';
@@ -31,7 +30,6 @@ export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
         transformerNotationHighlight(),
         transformerMetaHighlight(),
         transformerNotationFocus(),
-        transformerRemoveLineBreak(),
       ],
     },
   );
