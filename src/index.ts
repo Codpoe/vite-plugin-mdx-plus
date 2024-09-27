@@ -65,12 +65,15 @@ export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
     {
       ...mdxPlugin,
       enforce: 'pre',
-      transform(code, id) {
-        const [path] = id.split('?');
+      transform: {
+        order: 'pre',
+        handler(code, id) {
+          const [path] = id.split('?');
 
-        if (path.endsWith('.md') || path.endsWith('.mdx')) {
-          return mdxPlugin.transform.call(this, code, path);
-        }
+          if (path.endsWith('.md') || path.endsWith('.mdx')) {
+            return mdxPlugin.transform.call(this, code, path);
+          }
+        },
       },
     },
   ];
