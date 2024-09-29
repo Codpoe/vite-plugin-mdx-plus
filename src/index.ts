@@ -12,6 +12,7 @@ import {
   transformerNotationDiff,
   transformerMetaHighlight,
   transformerNotationHighlight,
+  transformerNotationWordHighlight,
   transformerNotationFocus,
 } from '@shikijs/transformers';
 import { UserOptions } from './types.js';
@@ -28,6 +29,7 @@ export function mdxPlus(userOptions: UserOptions = {}): PluginOption {
       transformers: [
         transformerNotationDiff(),
         transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
         transformerMetaHighlight(),
         transformerNotationFocus(),
       ],

@@ -45,6 +45,13 @@
   background-color: rgba(142, 150, 170, .14);
 }
 
+.shiki .highlighted-word {
+  padding: 1px 3px;
+  margin: -1px -3px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+}
+
 .shiki.has-focused .line {
   filter: blur(.095rem);
   opacity: 0.7;
@@ -66,6 +73,10 @@ html.dark .shiki span {
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+html.dark .shiki .highlighted-word {
+  border-color: #6b7280;
 }
 
 @media (prefers-color-scheme: dark) {
